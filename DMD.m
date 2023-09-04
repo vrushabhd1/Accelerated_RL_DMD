@@ -7,7 +7,6 @@ function [Phi,Phio,lambda,zeta, U,S,V,U_r,S_r,V_r,W_r,W,Atilde1,Atilde,r] = DMD(
 [U, S, V] = svd(X11, 'econ');
  Atilde1 = U' * X22 * V / S;
     [W, D] = eig(Atilde1); 
-%     Phio = U * W;
     Phio = X22 * V / S * W;
  
     r = length(find(diag(S)>thresh));
@@ -18,20 +17,7 @@ function [Phi,Phio,lambda,zeta, U,S,V,U_r,S_r,V_r,W_r,W,Atilde1,Atilde,r] = DMD(
     Atilde = U_r' * X22 * V_r / S_r;   
     [W_r, D] = eig(Atilde);
     Phi = X22 * V_r / S_r * W_r;
-%   Phi = U_r * W_r;
 zeta = pinv(Phi)*X11;
 
 lambda = diag(D);
-% omega = log(lambda)/inputs.dt;
 
-%% compute DMD mode amplitudes
-x1 = X11(:, 1);
-% b = Phi\x1;
-% 
-% %% DMD reconstructions
-% time_dynamics = zeros(r, m);
-% t = (1:m)/inputs.dt;
-% for iter = 1:m
-%     time_dynamics(:,iter) = (b.*exp(omega*t(iter)));
-% end
-% Xdmd = Phi * time_dynamics;
