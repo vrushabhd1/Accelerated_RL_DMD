@@ -1,5 +1,7 @@
 # Accelerated_RL_DMD
 This repository provides a Matlab code for the research paper Accelerated Reinforcement Learning via Dynamic Mode Decomposition.
+
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=vrushabhd1/Accelerated_RL_DMD)
 # Discrete-Time Reinforcement Learning with Dynamic Mode Decomposition
 
 Welcome to the repository for our work on applying the Dynamic Mode Decomposition (DMD) principle to discrete-time reinforcement learning for solving optimal control problems in a network of subsystems. In this project, we tackle control design as a linear quadratic regulator graphical problem, where the performance function couples the dynamics of subsystems.
