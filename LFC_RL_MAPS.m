@@ -16,14 +16,10 @@ Lap = Dia - Adj;
 Tp=20;Tg=0.08;Tt=0.3;Kp=120;R=2.4;Tij=0.015;
 A1=[-1/Tp Kp/Tp 0 -Kp/Tp;0 -1/Tt 1/Tt 0;-1/(R*Tg) 0 -1/Tg 0;2*pi*Tij*(L-1) 0 0 0];
 A2=[0 0 0 0;0 0 0 0;0 0 0 0;-2*pi*Tij 0 0 0];
-% A1=[-1/Tp Kp/Tp 0 -Kp/Tp;0 -1/Tt 1/Tt 0;-1/(R*Tg) 0 -1/Tg 0;0 0 0 0];
-% A2=[0 0 0 0;0 0 0 0;0 0 0 0;2*pi*Tij*(L-1) 0 0 0];
 A1=kron(eye(L),A1);
 A2=kron(Lap,A2);
 A2=full(A2);
 A=A1+A2;
-% A2=kron(eye(L),A2);
-% A=A2;
 B=[0 0 1/Tg 0]';
 B=kron(eye(L),B);
 C=[1 zeros(3,1)';zeros(4,1)'];
@@ -70,7 +66,6 @@ k=0;z=0;iter=15;iterr=800;
 
 
 % Data collection original x
-   tic
 for i=1:iterr
     a1=0.001;
     a2=0.001;
@@ -84,20 +79,13 @@ for i=1:iterr
     Hxu=2*kron(x(:,i)',(u(:,i)+K*x(:,i))');
     Huu=-kron((-u(:,i)+K*x(:,i))',(u(:,i)+K*x(:,i))');
    
-%     desired1=x(:,i)'*Qbar*x(:,i)+x(:,i)'*K'*R*K*x(:,i);
-%     desired=[desired;desired1];
-%     J(:,i)=x(:,i)'*Qbar*x(:,i)+x(:,i)'*K'*R*K*x(:,i); 
-%     zbar1=[Hxx Hxu Huu]';
-%     zbar=[zbar;zbar1'];
-     
 end
-toc
+
 
 % %DMD
     tic
 for j=1:iter
     thresh = 1e-10;
-%     thresh = 0.2;
     [Phi,Phio,lambda,zeta, U,S,V,U_r,S_r,V_r,W_r,W,Atilde1,Atilde,r] = DMD(x,thresh);
 
 % Data matrices reduced x
@@ -107,9 +95,7 @@ for j=1:iter
      Qd=(U_r)'*Qbar*U_r;
      Ad=conj(U_r)'*A*U_r;
      Bd=conj(U_r)'*B;
-%      Pstard=dare(Ad,Bd,Qd,Rd);
      Pstard =conj(U_r)'* Pstar*U_r;
-%    Kstard=inv(Rd+Bd'*Pstard*Bd)*Bd'*Pstard*Ad;
      Kstard=(pinv(U_r)* Kstar')';
      
      dd1=zeta(:,j)'*Qd*zeta(:,j)+zeta(:,j)'*Kd'*Rd*Kd*zeta(:,j);
@@ -128,7 +114,6 @@ for j=1:iter
         ekd(z,:)=norm(Kd-Kstard);
        ekkd(z,:)=norm(Kd);
        epd(z,:)=norm(Pd-Pstard);
-%         epd(z,:)=norm(Pd);
         dd=[];
         zbard=[];
         K=Kd*(U_r)';
@@ -241,12 +226,7 @@ hold on
 xlabel('Iteration $j$');legend('$\Delta f$','$\Delta P_m$','$\Delta P_g$','$\Delta P_{tie}$');
 set(get(gca,'XLabel'),'FontSize',14);set(get(gca,'YLabel'),'FontSize',14);set(get(gca,'legend'),'FontSize',10);
 set(get(gca,'XLabel'),'Interpreter','latex');set(get(gca,'YLabel'),'Interpreter','latex');set(get(gca,'legend'),'Interpreter','latex');
-% figure(7)
-% plot(tt,zeta(:,tt),'Linewidth',1.5);
-% hold on
-% xlabel('Iteration $j$');ylabel('$\xi$');
-% set(get(gca,'XLabel'),'FontSize',14);set(get(gca,'YLabel'),'FontSize',14);set(get(gca,'legend'),'FontSize',10);
-% set(get(gca,'XLabel'),'Interpreter','latex');set(get(gca,'YLabel'),'Interpreter','latex');set(get(gca,'legend'),'Interpreter','latex');
+
 figure(8)
 surf(real(Phi*Atilde*Phi'));
 figure(9)
@@ -256,29 +236,3 @@ surf(Atilde1);
 figure(11)
 plot(diag(S)/sum(diag(S)),'ro'); title('low rank property for DMD (rank = 4, four modes)');
 
-% plot(tt,Y(:,tt),'Linewidth',2);
-
-% tt1=1:200;
-% figure(12)
-% subplot(2,2,1);
-% plot(tt1,x(1:4:96,tt1),'r','Linewidth',1);
-% ylabel('$\Delta f$');xlabel('Iteration $j$');
-% set(get(gca,'XLabel'),'FontSize',12);set(get(gca,'YLabel'),'FontSize',12);set(get(gca,'legend'),'FontSize',10);
-% set(get(gca,'XLabel'),'Interpreter','latex');set(get(gca,'YLabel'),'Interpreter','latex');set(get(gca,'legend'),'Interpreter','latex');
-% subplot(2,2,2);
-% plot(tt1,x(2:4:96,tt1),'b','Linewidth',1);
-% ylabel('$\Delta P_m$');xlabel('Iteration $j$');
-% set(get(gca,'XLabel'),'FontSize',12);set(get(gca,'YLabel'),'FontSize',12);set(get(gca,'legend'),'FontSize',10);
-% set(get(gca,'XLabel'),'Interpreter','latex');set(get(gca,'YLabel'),'Interpreter','latex');set(get(gca,'legend'),'Interpreter','latex');
-% subplot(2,2,3);
-% plot(tt1,x(3:4:96,tt1),'k','Linewidth',1);
-% ylabel('$\Delta P_g$');xlabel('Iteration $j$');
-% set(get(gca,'XLabel'),'FontSize',12);set(get(gca,'YLabel'),'FontSize',12);set(get(gca,'legend'),'FontSize',10);
-% set(get(gca,'XLabel'),'Interpreter','latex');set(get(gca,'YLabel'),'Interpreter','latex');set(get(gca,'legend'),'Interpreter','latex');
-% subplot(2,2,4);
-% plot(tt1,x(4:4:96,tt1),'Linewidth',1);
-% ylabel('$\Delta P_{tie}$');xlabel('Iteration $j$');
-% set(get(gca,'XLabel'),'FontSize',12);set(get(gca,'YLabel'),'FontSize',12);set(get(gca,'legend'),'FontSize',10);
-figure(66)
-subplot(1,2,1), semilogy(diag(S),'k')
-subplot(1,2,2), plot(cumsum(diag(S))/sum(diag(S)),'k')
