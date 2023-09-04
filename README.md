@@ -1,6 +1,6 @@
 # Accelerated_RL_DMD
 This repository provides a Matlab code for the research paper Accelerated Reinforcement Learning via Dynamic Mode Decomposition.
-
+Please refer to the documentation (https://ieeexplore.ieee.org/abstract/document/10076803).
 [![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=vrushabhd1/Accelerated_RL_DMD)
 # Discrete-Time Reinforcement Learning with Dynamic Mode Decomposition
 
