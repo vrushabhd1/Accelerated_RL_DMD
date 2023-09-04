@@ -1,2 +1,2 @@
 # Accelerated_RL_DMD
-Dynamic mode decomposition to accelerate reinforcement learning 
+This repository provides a Matlab code for the research paper Accelerated Reinforcement Learning via Dynamic Mode Decomposition.
